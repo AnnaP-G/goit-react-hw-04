@@ -1,9 +1,10 @@
 import ImageCard from "../ImageCard/ImageCard";
+import css from './ImageGallery.module.css'
 
 const ImageGallery = ({ images, onModalOpen }) => {
   console.log(images);
   return (
-    <ul>
+    <ul className={css.galleryList}>
       {Array.isArray(images) &&
         images.map((image) => {
           return (
