@@ -1,54 +1,34 @@
-import { Form, Formik, ErrorMessage, Field } from "formik";
-import * as Yup from "yup";
+import toast, { Toaster } from "react-hot-toast";
 
-const formSearchScheme = Yup.object().shape({
-  searchForm: Yup.default.string(),
-});
+const notify = () => toast.error("Please enter text to search for images");
 
-const formInitialValues = {
-  searchForm: "",
-};
-
-const SearchBar = ({ onSetSearchQuery }) => {
-  const handleSubmit = (values) => {
-    onSetSearchQuery(values.searchTerm);
+const SearchBar = ({ onSubmit }) => {
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    const searchValue = evt.currentTarget.elements.searchForm.value.trim();
+    if (!searchValue) {
+      notify();
+      return;
+    }
+    onSubmit(searchValue);
+    evt.target.reset();
   };
 
   return (
-    <Formik
-      initialValues={formInitialValues}
-      validationSchema={formSearchScheme}
-      onSubmit={handleSubmit}
-    >
-      <Form>
-        <Field
+    <header>
+      <form onSubmit={handleSubmit}>
+        <input
           type="text"
           name="searchForm"
+          autoComplete="off"
+          autoFocus
           placeholder="Search images and photos"
         />
-        <ErrorMessage component="span" name="searchForm" />
         <button type="submit">Search</button>
-      </Form>
-    </Formik>
+        <Toaster position="top-center" />
+      </form>
+    </header>
   );
 };
 
 export default SearchBar;
-
-// const SearchBar = ({ onSubmit }) => {
-//   return (
-//     <header>
-//       <form>
-//         <input
-//           type="text"
-//           autocomplete="off"
-//           autofocus
-//           placeholder="Search images and photos"
-//         />
-//         <button type="submit">Search</button>
-//       </form>
-//     </header>
-//   );
-// };
-
-// export default SearchBar;
